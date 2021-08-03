@@ -29,14 +29,14 @@ export class UserController implements MvcController {
 
     async index(request: HttpRequest): Promise<HttpResponse> {
         try {
-            const cache = await this.#cache.get('users:all');
-            if(cache) {
-                return ok(cache.map((users: any) => Object.assign({}, users, { cache: true })));
-            }
+            // const cache = await this.#cache.get('users:all');
+            // if(cache) {
+            //     return ok(cache.map((users: any) => Object.assign({}, users, { cache: true })));
+            // }
 
             const users = await this.#repository.getUsers();
 
-            await this.#cache.set(`users:all`, users);
+            // await this.#cache.set(`users:all`, users);
 
             return ok(users);
         } catch(error) {
