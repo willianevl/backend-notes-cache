@@ -36,9 +36,9 @@ export default class App {
     router.get("/", (_: Request, res: Response) => res.send("API RUNNING..."));
 
 
-    const userRoutes = new UserRoutes().init();
-    const notesRoutes = new NotesRoutes().init();
-    const checkedNotesRoutes = new CheckedNotesRoutes().init();
+    const userRoutes = new UserRoutes().init(router);
+    const notesRoutes = new NotesRoutes().init(router);
+    const checkedNotesRoutes = new CheckedNotesRoutes().init(router);
     this.#express.use(userRoutes, notesRoutes, checkedNotesRoutes);
   }
 

@@ -1,5 +1,5 @@
 import { CacheRepository } from "../../../../core/infra";
-import { HttpRequest, HttpResponse, MvcController, notFound, ok, serverError } from "../../../../core/presentation";
+import { DataNotFoundError, HttpRequest, HttpResponse, MvcController, notFound, ok, serverError } from "../../../../core/presentation";
 import { NotesRepository } from "../../infra";
 
 export class NotesController implements MvcController {
@@ -53,7 +53,7 @@ export class NotesController implements MvcController {
             }
 
             const note = await this.#repository.getNote(uid);
-            if(!note) return notFound();
+            if(!note) return notFound(new DataNotFoundError());
 
             await this.#cache.set(`note:${uid}`, note);
 

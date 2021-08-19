@@ -12,8 +12,7 @@ const makeController = (): MvcController => {
 }
 
 export class NotesRoutes {
-    public init(): Router {
-        const routes = Router();
+    public init(routes: Router): Router {
 
         routes.post('/notes', middlewareAdapter(new NotesMiddleware()), 
         routerMvcAdapter(makeController(), EMvc.STORE));

@@ -1,5 +1,5 @@
 import { CacheRepository } from "../../../../core/infra";
-import { HttpRequest, HttpResponse, MvcController, notFound, ok, serverError } from "../../../../core/presentation";
+import { DataNotFoundError, HttpRequest, HttpResponse, MvcController, notFound, ok, serverError } from "../../../../core/presentation";
 import { CheckedNotesRepository } from "../../infra";
 
 
@@ -54,7 +54,7 @@ export class CheckedNotesController implements MvcController {
             }
 
             const checkednote = await this.#repository.getNote(uid);
-            if(!checkednote) return notFound();
+            if(!checkednote) return notFound(new DataNotFoundError());
 
             await this.#cache.set(`checkednote:${uid}`, checkednote)
 

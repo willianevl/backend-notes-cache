@@ -1,7 +1,7 @@
 export interface CheckedNotes {
-    uid: string;
+    uid?: string;
     title: string;
     description: string;
-    userUid: string;
+    userUid?: string;
     createdAt?: Date;
 }

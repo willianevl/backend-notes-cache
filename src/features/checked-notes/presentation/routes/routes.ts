@@ -13,8 +13,7 @@ const makeController = (): MvcController => {
 }
 
 export class CheckedNotesRoutes {
-    public init(): Router {
-        const routes = Router();
+    public init(routes: Router): Router {
 
         routes.post('/checkednotes', middlewareAdapter(new CheckedNotesMiddleware()), 
         routerMvcAdapter(makeController(), EMvc.STORE));

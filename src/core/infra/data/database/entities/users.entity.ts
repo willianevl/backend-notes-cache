@@ -6,7 +6,7 @@ import { NotesEntity } from "./notes.entity";
 @Entity({name: "users"})
 export class UserEntity extends BaseEntity {
     @PrimaryColumn({name: "uid"})
-    uid?: string;
+    uid!: string;
 
     @Column({name: "username"})
     username: string;

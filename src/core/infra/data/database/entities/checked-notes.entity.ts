@@ -5,7 +5,7 @@ import { UserEntity } from "./users.entity";
 @Entity({name: "checked_notes"})
 export class CheckedNotesEntity extends BaseEntity {
     @PrimaryColumn({name: "uid"})
-    uid?: string;
+    uid!: string;
 
     @Column({name: "title"})
     title: string;

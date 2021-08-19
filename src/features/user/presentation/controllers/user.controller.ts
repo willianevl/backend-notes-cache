@@ -1,5 +1,6 @@
+import { DeleteResult } from "typeorm";
 import { CacheRepository } from "../../../../core/infra";
-import { HttpRequest, HttpResponse, MvcController, notFound, ok, serverError } from "../../../../core/presentation";
+import { DataNotFoundError, HttpRequest, HttpResponse, MvcController, notFound, ok, serverError } from "../../../../core/presentation";
 import { UserRepository } from "../../infra";
 
 
@@ -27,16 +28,16 @@ export class UserController implements MvcController {
         }
     }
 
-    async index(request: HttpRequest): Promise<HttpResponse> {
+    async index(): Promise<HttpResponse> {
         try {
-            // const cache = await this.#cache.get('users:all');
-            // if(cache) {
-            //     return ok(cache.map((users: any) => Object.assign({}, users, { cache: true })));
-            // }
+            const cache = await this.#cache.get('users:all');
+            if(cache) {
+                return ok(cache.map((users: any) => Object.assign({}, users, { cache: true })));
+            }
 
             const users = await this.#repository.getUsers();
 
-            // await this.#cache.set(`users:all`, users);
+            await this.#cache.set(`users:all`, users);
 
             return ok(users);
         } catch(error) {
@@ -55,7 +56,7 @@ export class UserController implements MvcController {
             }
 
             const user = await this.#repository.getUser(uid);
-            if(!user) return notFound();
+            if(!user) return notFound(new DataNotFoundError());
 
             await this.#cache.set(`user:${uid}`, user);
 
@@ -68,7 +69,7 @@ export class UserController implements MvcController {
     async delete(request: HttpRequest): Promise<HttpResponse> {
         const { uid } = request.params;
         try {
-            const user = await this.#repository.delete(uid);
+            const user: DeleteResult = await this.#repository.delete(uid);
 
             await this.#cache.del('users:all');
             await this.#cache.del(`user:${uid}`);
