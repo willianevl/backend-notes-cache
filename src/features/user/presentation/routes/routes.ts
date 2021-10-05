@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { CacheRepository } from "../../../../core/infra";
 import { EMvc, middlewareAdapter, MvcController, routerMvcAdapter } from "../../../../core/presentation";
 import { UserRepository } from "../../infra";
 import { UserController } from "../controllers";
@@ -9,8 +8,7 @@ import { UserMiddleware } from "../middlewares";
 
 const makeController = (): MvcController => {
     const repository = new UserRepository();
-    const cache = new CacheRepository();
-    return new UserController(repository, cache);
+    return new UserController(repository);
 }
 
 export class UserRoutes {

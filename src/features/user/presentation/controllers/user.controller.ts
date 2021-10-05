@@ -1,5 +1,4 @@
 import { DeleteResult } from "typeorm";
-import { CacheRepository } from "../../../../core/infra";
 import { DataNotFoundError, HttpRequest, HttpResponse, MvcController, notFound, ok, serverError } from "../../../../core/presentation";
 import { UserRepository } from "../../infra";
 
@@ -7,18 +6,14 @@ import { UserRepository } from "../../infra";
 export class UserController implements MvcController {
 
     readonly #repository: UserRepository;
-    readonly #cache: CacheRepository;
 
-    constructor(repository: UserRepository, cache: CacheRepository) {
+    constructor(repository: UserRepository) {
         this.#repository = repository;
-        this.#cache = cache;
     }
 
     async store(request: HttpRequest): Promise<HttpResponse> {
         try {
             const user = await this.#repository.create(request.body);
-
-            await this.#cache.del('users:all');
 
             return ok(user);
         } catch(error) {
@@ -30,14 +25,7 @@ export class UserController implements MvcController {
 
     async index(): Promise<HttpResponse> {
         try {
-            const cache = await this.#cache.get('users:all');
-            if(cache) {
-                return ok(cache.map((users: any) => Object.assign({}, users, { cache: true })));
-            }
-
             const users = await this.#repository.getUsers();
-
-            await this.#cache.set(`users:all`, users);
 
             return ok(users);
         } catch(error) {
@@ -50,15 +38,8 @@ export class UserController implements MvcController {
         const { uid } = request.params;
 
         try {
-            const cache = await this.#cache.get(`user:${uid}`);
-            if(cache){
-                return ok(Object.assign({}, cache, {cache: true}));
-            }
-
             const user = await this.#repository.getUser(uid);
             if(!user) return notFound(new DataNotFoundError());
-
-            await this.#cache.set(`user:${uid}`, user);
 
             return ok(user);
         } catch(error){
@@ -71,9 +52,6 @@ export class UserController implements MvcController {
         try {
             const user: DeleteResult = await this.#repository.delete(uid);
 
-            await this.#cache.del('users:all');
-            await this.#cache.del(`user:${uid}`);
-
             return ok(user);
         } catch(error) {
             return serverError();
@@ -84,9 +62,6 @@ export class UserController implements MvcController {
         const { uid } = request.params;
         try {
             const user = await this.#repository.update(uid, request.body);
-
-            await this.#cache.del('users:all');
-            await this.#cache.del(`user:${uid}`);
 
             return ok(user);
         } catch(error) {
