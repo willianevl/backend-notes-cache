@@ -25,10 +25,10 @@ if (process.env.NODE_ENV.toString() === "test") {
             }
         },
         entities: [
-            'src/core/infra/data/database/entities/**/*'
+            'dist/src/core/infra/data/database/entities/**/*'
         ],
         migrations: [
-            'src/core/infra/data/database/migrations/**/*'
+            'dist/src/core/infra/data/database/migrations/**/*'
         ],
         cli: {
             entitiesDir: 'src/core/infra/data/database/entities',
