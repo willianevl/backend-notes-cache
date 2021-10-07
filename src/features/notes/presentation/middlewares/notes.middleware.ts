@@ -7,8 +7,7 @@ export class NotesMiddleware implements Middleware {
 
         const requiredFields = [
             'title',
-            'description',
-            'userUid'
+            'description'
         ];
 
         for(const field of requiredFields){
