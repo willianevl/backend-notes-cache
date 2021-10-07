@@ -30,8 +30,8 @@ export class NotesRepository {
         } as Notes;
     }
 
-    async getNotes(uid: string): Promise<Notes[]> {
-        const notes = await NotesEntity.find({userUid: uid});
+    async getNotes(): Promise<Notes[]> {
+        const notes = await NotesEntity.find();
 
         return notes.map((note) => {
             return {

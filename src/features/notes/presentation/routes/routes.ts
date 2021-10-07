@@ -15,7 +15,7 @@ export class NotesRoutes {
         routes.post('/notes', middlewareAdapter(new NotesMiddleware()), 
         routerMvcAdapter(makeController(), EMvc.STORE));
         
-        routes.get('/notes/user/:uid', routerMvcAdapter(makeController(), EMvc.INDEX));
+        routes.get('/notes', routerMvcAdapter(makeController(), EMvc.INDEX));
         routes.get('/notes/:uid', routerMvcAdapter(makeController(), EMvc.SHOW));
         routes.put('/notes/:uid', middlewareAdapter(new NotesMiddleware()),
         routerMvcAdapter(makeController(), EMvc.UPDATE));

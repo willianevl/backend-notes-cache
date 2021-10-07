@@ -20,10 +20,8 @@ export class NotesController implements MvcController {
     }
     
     async index(request: HttpRequest): Promise<HttpResponse> {
-        const { uid } = request.params;
-
         try {
-            const notes = await this.#repository.getNotes(uid);
+            const notes = await this.#repository.getNotes();
 
             return ok(notes)
         } catch(error) {
